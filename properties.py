@@ -40,4 +40,8 @@ if __name__ == '__main__':
 		properties.append(Trademe_Property(url))
 
 	for p in properties:
+		print("Title: " + p.get_title())
+		print("url: " + p.url)
+		print("Price: " + p.get_price())
+		print("Address:")
 		print(p.get_address())
