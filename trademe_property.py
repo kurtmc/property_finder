@@ -43,7 +43,10 @@ class Trademe_Property:
 
 	def get_html(self):
 		if self.html_page is None:
-			self.html_page = urllib.request.urlopen(self.url)
+			try:
+				self.html_page = urllib.request.urlopen(self.url)
+			except urllib.error.URLError:
+				print("An error occured trying to get page for url: " + self.url)
 		return self.html_page
 			
 
