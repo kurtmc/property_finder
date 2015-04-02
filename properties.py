@@ -41,6 +41,8 @@ if __name__ == '__main__':
 
 	for p in properties:
 		print("Title: " + p.get_title())
+		print("Description:")
+		print(p.get_description()[:200])
 		print("url: " + p.url)
 		print("Price: " + p.get_price())
 		print("Address:")
