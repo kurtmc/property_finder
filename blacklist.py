@@ -11,5 +11,5 @@ def is_blacklisted(url):
 
 def blacklist(url):
 	if not is_blacklisted(url):
-		file = open('.blacklist', 'w+')
+		file = open('.blacklist', 'a')
 		file.write(url + "\n")
