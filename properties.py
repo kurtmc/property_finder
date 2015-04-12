@@ -45,6 +45,14 @@ def words_in_string(words, string):
 def word_in_string(word, string):
 	return re.compile(r'\b({0})\b'.format(word), flags=re.IGNORECASE).search(string)
 
+# Stolen from stackoverflow (http://stackoverflow.com/questions/1936466/beautifulsoup-grab-visible-webpage-text)
+def visible(element):
+	if element.parent.name in ['style', 'script', '[document]', 'head', 'title']:
+		return False
+	elif re.match('<!--.*-->', str(element)):
+		return False
+	return True
+
 if __name__ == '__main__':
 	urls = get_properties_trademe('250', '400')
 	properties = list()
@@ -53,8 +61,9 @@ if __name__ == '__main__':
 
 	unfurnished = list()
 	for p in properties:
-		p_html = p.build_string(p.get_soup())
-		if not words_in_string(["furnished", "rented", "bed"], p_html):
+		p_text = filter(visible, p.get_soup().findAll(text=True))
+		p_text = " ".join(p_text)
+		if not words_in_string(["furnished", "rented", "bed"], p_text):
 			unfurnished.append(p)
 
 	unfurnished = list(set(unfurnished))
