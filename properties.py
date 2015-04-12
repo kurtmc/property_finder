@@ -5,6 +5,8 @@ import re
 from bs4 import BeautifulSoup
 import webbrowser
 from trademe_property import Trademe_Property
+import blacklist
+import sys, getopt
 
 def get_urls(url):
 	urls = list()
@@ -54,10 +56,27 @@ def visible(element):
 	return True
 
 if __name__ == '__main__':
-	urls = get_properties_trademe('250', '400')
+	# Command line options
+	try:
+		opts, args = getopt.getopt(sys.argv[1:], "hb:", ["help", "blacklist"])
+	except getopt.GetoptError:
+		print("./properties -b <url to blacklist>")
+		sys.exit(2)
+	for opt, arg in opts:
+		if opt in ("-h", "--help"):
+			print("./properties -b <url to blacklist>")
+			sys.exit(2)
+		elif opt in ("-b", "--blacklist"):
+			blacklist.blacklist(arg)
+			print("Blacklisted " + arg);
+			sys.exit(0)
+
+
+	urls = get_properties_trademe('330', '410')
 	properties = list()
 	for url in urls:
-		properties.append(Trademe_Property(url))
+		if not blacklist.is_blacklisted(url):
+			properties.append(Trademe_Property(url))
 
 	unfurnished = list()
 	for p in properties:
