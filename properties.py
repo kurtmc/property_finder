@@ -55,24 +55,41 @@ def visible(element):
 		return False
 	return True
 
+def print_help():
+	print("Search for properties in price range")
+	print("./properties -s <start price> -e <end price>")
+	print("Blacklist a property")
+	print("./properties -b <url>")
+	print("Print this message")
+	print("./properties -h")
+
 if __name__ == '__main__':
 	# Command line options
+	start_price = None
+	end_price = None
 	try:
-		opts, args = getopt.getopt(sys.argv[1:], "hb:", ["help", "blacklist"])
+		opts, args = getopt.getopt(sys.argv[1:], "hs:e:b:", ["help", "start_price", "end_price", "blacklist"])
 	except getopt.GetoptError:
-		print("./properties -b <url to blacklist>")
+		print_help()
 		sys.exit(2)
 	for opt, arg in opts:
 		if opt in ("-h", "--help"):
-			print("./properties -b <url to blacklist>")
+			print_help()
 			sys.exit(2)
 		elif opt in ("-b", "--blacklist"):
 			blacklist.blacklist(arg)
 			print("Blacklisted " + arg);
 			sys.exit(0)
+		elif opt in ("-s", "--start_price"):
+			start_price = arg
+		elif opt in ("-e", "--end_price"):
+			end_price = arg
 
+	if start_price is None or end_price is None:
+		print_help()
+		sys.exit(1)
 
-	urls = get_properties_trademe('330', '410')
+	urls = get_properties_trademe(start_price, end_price)
 	properties = list()
 	for url in urls:
 		if not blacklist.is_blacklisted(url):
