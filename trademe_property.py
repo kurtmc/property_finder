@@ -15,7 +15,7 @@ class Trademe_Property:
 
 	def get_soup(self):
 		if self.soup is None:
-			self.soup = BeautifulSoup(self.get_html())
+			self.soup = BeautifulSoup(self.get_html(), "html.parser")
 		return self.soup
 		
 

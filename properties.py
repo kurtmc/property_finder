@@ -15,7 +15,7 @@ def get_urls(url):
 	except urllib.error.URLError:
 		print("Timed out trying to get page")
 		exit(1)
-	soup = BeautifulSoup(html_page)
+	soup = BeautifulSoup(html_page, "html.parser")
 	for link in soup.findAll('a'):
 		urls.append(link.get('href'))
 	return urls
